@@ -1,8 +1,13 @@
 package core.basesyntax.model;
 
+import core.basesyntax.exception.UserValidationException;
+
 import java.util.Objects;
 
 public class User {
+    private static final int MIN_PASSWORD_LENGTH = 6;
+    private static final int MIN_LOGIN_LENGTH = 6;
+    private static final int MIN_AGE = 18;
     private Long id;
     private String login;
     private String password;
@@ -38,6 +43,27 @@ public class User {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public void validate() throws UserValidationException {
+        if (login == null) {
+            throw new UserValidationException("Login is required");
+        }
+        if (password == null) {
+            throw new UserValidationException("Password is required");
+        }
+        if (age == null) {
+            throw new UserValidationException("Age is required");
+        }
+        if (password.length() < MIN_PASSWORD_LENGTH) {
+            throw new UserValidationException("Password must be at least " + MIN_PASSWORD_LENGTH + " characters");
+        }
+        if (login.length() < MIN_LOGIN_LENGTH) {
+            throw new UserValidationException("Login must be at least " + MIN_LOGIN_LENGTH + " characters");
+        }
+        if (age < MIN_AGE) {
+            throw new UserValidationException("Age must be at least " + MIN_AGE);
+        }
     }
 
     @Override
